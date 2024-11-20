@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "target": "ES2020",
+      "module": "commonjs"  // or "esnext" depending on your project setup
+    }
+  }
+  
