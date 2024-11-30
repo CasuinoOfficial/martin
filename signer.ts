@@ -38,7 +38,7 @@ export class HouseSigner {
     } else {
       this.suiKeypair = Secp256k1Keypair.fromSecretKey(secretKey);
     };
-    this.suiClient = new SuiClient({ url: getFullnodeUrl("mainnet")});
+    this.suiClient = new SuiClient({   url: "https://fullnode-doubleup.com"  });
   }
 
   getSuiAddress(): string {

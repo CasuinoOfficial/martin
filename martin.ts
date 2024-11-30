@@ -166,7 +166,7 @@ async function main() {
 
         console.log(tracker);
 
-        await sleep(4000);
+        await sleep(5000);
     };
 }
 
