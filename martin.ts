@@ -59,7 +59,7 @@ export const getInputCoins = async (
     );
   };
 
-export const PARTNER_COINFLIP_PACKAGE_ID = "0x2e7e7e71cd8cb283c4e4dbb652b9155b85dd5afce6bdd7881ae228eb26fc4082";
+export const PARTNER_COINFLIP_PACKAGE_ID = "0xc7a14e8e58abc21100a5c218d4e4f89cf8f1ac1af7066b451dfb05f976002f15";
 export const PARTNER_FLIP_GAME_TYPE = `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::Coinflip`;
   
 const DOUBLEUP_CITIZEN_TYPE = '0x862810efecf0296db2e9df3e075a7af8034ba374e73ff1098e88cc4bb7c15437::doubleup_citizens::DoubleUpCitizen';
@@ -97,26 +97,38 @@ async function coinflip(
         coinType, 
         [amount]
     );
-    let citizensId = CITIZENS_ID.map((id) => tx.object(id));
+    // let citizensId = CITIZENS_ID.map((id) => tx.object(id));
 
-    let vector = tx.makeMoveVec({
-        elements: citizensId,
-        type: `${DOUBLEUP_CITIZEN_TYPE}`
-    })
+    // let vector = tx.makeMoveVec({
+    //     elements: citizensId,
+    //     type: `${DOUBLEUP_CITIZEN_TYPE}`
+    // })
+
+    // tx.moveCall({
+    //     target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play_with_partner`,
+    //     typeArguments: [coinType, DOUBLEUP_CITIZEN_TYPE],
+    //     arguments: [
+    //         tx.object(UNIHOUSE_OBJECT_ID),
+    //         tx.object('0x8'),
+    //         tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
+    //         coin,
+    //         // tx.object(PARTNER_LIST_OBJECT),
+    //         // vector,
+    //         tx.pure.string("martin")
+    //     ]
+    // });
 
     tx.moveCall({
-        target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play_with_partners`,
-        typeArguments: [coinType, DOUBLEUP_CITIZEN_TYPE],
-        arguments: [
-            tx.object(UNIHOUSE_OBJECT_ID),
-            tx.object('0x8'),
-            tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
-            coin,
-            tx.object(PARTNER_LIST_OBJECT),
-            vector,
-            tx.pure.string("martin")
-        ]
-    });
+      target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play`,
+      typeArguments: [coinType],
+      arguments: [
+          tx.object(UNIHOUSE_OBJECT_ID),
+          tx.object('0x8'),
+          tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
+          coin,
+          tx.pure.string("martin")
+      ]
+  });
 
     tx.setGasBudget(1_000_000_000);
 
@@ -134,7 +146,7 @@ async function coinflip(
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
-    let previousAmount = 500;
+    let previousAmount = 50;
     let tracker = 0;
     const SIX_DECIMALs = 1_000_000;
     const NINE_DECIMALs = 1_000_000_000;
@@ -154,7 +166,7 @@ async function main() {
 
         console.log(tracker);
 
-        await sleep(3000);
+        await sleep(4000);
     };
 }
 
