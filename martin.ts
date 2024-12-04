@@ -97,38 +97,38 @@ async function coinflip(
         coinType, 
         [amount]
     );
-    // let citizensId = CITIZENS_ID.map((id) => tx.object(id));
+    let citizensId = CITIZENS_ID.map((id) => tx.object(id));
 
-    // let vector = tx.makeMoveVec({
-    //     elements: citizensId,
-    //     type: `${DOUBLEUP_CITIZEN_TYPE}`
-    // })
-
-    // tx.moveCall({
-    //     target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play_with_partner`,
-    //     typeArguments: [coinType, DOUBLEUP_CITIZEN_TYPE],
-    //     arguments: [
-    //         tx.object(UNIHOUSE_OBJECT_ID),
-    //         tx.object('0x8'),
-    //         tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
-    //         coin,
-    //         // tx.object(PARTNER_LIST_OBJECT),
-    //         // vector,
-    //         tx.pure.string("martin")
-    //     ]
-    // });
+    let vector = tx.makeMoveVec({
+        elements: citizensId,
+        type: `${DOUBLEUP_CITIZEN_TYPE}`
+    })
 
     tx.moveCall({
-      target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play`,
-      typeArguments: [coinType],
-      arguments: [
-          tx.object(UNIHOUSE_OBJECT_ID),
-          tx.object('0x8'),
-          tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
-          coin,
-          tx.pure.string("martin")
-      ]
-  });
+        target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play_with_partners`,
+        typeArguments: [coinType, DOUBLEUP_CITIZEN_TYPE],
+        arguments: [
+            tx.object(UNIHOUSE_OBJECT_ID),
+            tx.object('0x8'),
+            tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
+            coin,
+            tx.object(PARTNER_LIST_OBJECT),
+            vector,
+            tx.pure.string("martin")
+        ]
+    });
+
+  //   tx.moveCall({
+  //     target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play`,
+  //     typeArguments: [coinType],
+  //     arguments: [
+  //         tx.object(UNIHOUSE_OBJECT_ID),
+  //         tx.object('0x8'),
+  //         tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
+  //         coin,
+  //         tx.pure.string("martin")
+  //     ]
+  // });
 
     tx.setGasBudget(1_000_000_000);
 
@@ -146,7 +146,7 @@ async function coinflip(
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
-    let previousAmount = 50;
+    let previousAmount = 300;
     let tracker = 0;
     const SIX_DECIMALs = 1_000_000;
     const NINE_DECIMALs = 1_000_000_000;

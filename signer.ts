@@ -64,6 +64,6 @@ export class HouseSigner {
 }
 
 export const martinSigner = new HouseSigner({
-    privateKey: process.env.MARTIN2 ?? "",
+    privateKey: process.env.MARTIN ?? "",
 });
 console.log(martinSigner.getSuiAddress());
