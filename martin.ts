@@ -146,7 +146,7 @@ async function coinflip(
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
-    let previousAmount = 300;
+    let previousAmount = 400;
     let tracker = 0;
     const SIX_DECIMALs = 1_000_000;
     const NINE_DECIMALs = 1_000_000_000;
