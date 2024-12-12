@@ -61,7 +61,10 @@ export const getInputCoins = async (
 
 export const PARTNER_COINFLIP_PACKAGE_ID = "0xc7a14e8e58abc21100a5c218d4e4f89cf8f1ac1af7066b451dfb05f976002f15";
 export const PARTNER_FLIP_GAME_TYPE = `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::Coinflip`;
-  
+
+export const RANGE_PACKAGE_ID = "0x18808a459546986f5f2f8e6add5967a6586f208715c65bdf4c86e34d810a6011";
+export const RANGE_GAME_TYPE = `${RANGE_PACKAGE_ID}::coinflip::Coinflip`;
+
 const DOUBLEUP_CITIZEN_TYPE = '0x862810efecf0296db2e9df3e075a7af8034ba374e73ff1098e88cc4bb7c15437::doubleup_citizens::DoubleUpCitizen';
 // Partner List
 export const PARTNER_LIST_OBJECT = "0x360bfd4d00d6c49c3ca570a4256c1ed27c9c7997f2beba8b4d1d66f432deff76"
@@ -86,7 +89,7 @@ export const UNIHOUSE_OBJECT_ID =
 
 const BASE_FLIP = 1_000_000_000;
 
-async function coinflip(
+async function range(
     amount: number,
     coinType: string
 ): Promise<any> {
@@ -103,32 +106,33 @@ async function coinflip(
         elements: citizensId,
         type: `${DOUBLEUP_CITIZEN_TYPE}`
     })
+    const range = [
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+      [1, 5000],
+    ];
 
     tx.moveCall({
-        target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play_with_partners`,
+        target: `${RANGE_PACKAGE_ID}::ufo_range::play_with_partners`,
         typeArguments: [coinType, DOUBLEUP_CITIZEN_TYPE],
         arguments: [
             tx.object(UNIHOUSE_OBJECT_ID),
             tx.object('0x8'),
-            tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
             coin,
+            tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
+            tx.pure(bcs.vector(bcs.vector(bcs.U64)).serialize(range)),
             tx.object(PARTNER_LIST_OBJECT),
             vector,
             tx.pure.string("martin")
         ]
     });
-
-  //   tx.moveCall({
-  //     target: `${PARTNER_COINFLIP_PACKAGE_ID}::coinflip::play`,
-  //     typeArguments: [coinType],
-  //     arguments: [
-  //         tx.object(UNIHOUSE_OBJECT_ID),
-  //         tx.object('0x8'),
-  //         tx.pure(bcs.vector(bcs.U64).serialize([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
-  //         coin,
-  //         tx.pure.string("martin")
-  //     ]
-  // });
 
     tx.setGasBudget(1_000_000_000);
 
@@ -153,7 +157,7 @@ async function main() {
     // await coinflip(320 * 1_000_000_000, ALPHAFI_COIN_TYPE)
     while(true) {
         let targetCoinType = USDC_COIN_TYPE;
-        let resp = await coinflip(
+        let resp = await range(
             previousAmount * SIX_DECIMALs,
             targetCoinType
         );
